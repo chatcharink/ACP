@@ -1,0 +1,38 @@
+<form data-filter-target="form" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-4">
+
+    <input name="keyword" value="<%= params[:keyword] %>" placeholder="ค้นหาชื่อ" class="input-clean" data-filter-target="input" data-action="input->filter#live">
+
+    <select name="status" class="input-clean" data-action="change->filter#live">
+        <option value="">สถานะทั้งหมด</option>
+        <option value="0" <%= "selected" if params[:status]=="0" %>>รอยืนยัน</option>
+        <option value="1" <%= "selected" if params[:status]=="1" %>>ยืนยัน</option>
+        <option value="2" <%= "selected" if params[:status]=="2" %>>ปฏิเสธ</option>
+    </select>
+
+    <select name="song_status" class="input-clean" data-action="change->filter#live">
+        <option value="">สถานะเพลงทั้งหมด</option>
+        <option value="0" <%= "selected" if params[:song_status]=="0" %>>รอยืนยัน</option>
+        <option value="1" <%= "selected" if params[:song_status]=="1" %>>ยืนยัน</option>
+        <option value="2" <%= "selected" if params[:song_status]=="2" %>>ปฏิเสธ</option>
+    </select>
+
+    <select name="category" class="input-clean" data-action="change->filter#live" >
+
+        <option value="" selected>
+            รุ่นทั้งหมด
+        </option>
+        <% @category_groups.each do |group| %>
+            <optgroup label="<%= group.name_th %>" class="font-bold">
+
+            <% group.categories.each do |c| %>
+                <option value="<%= c.code %>" <%= "selected" if params[:category] == c.code %>>
+                    <%= c.name_en %>
+                </option>
+            <% end %>
+
+            </optgroup>
+        <% end %>
+
+    </select>
+
+</form>

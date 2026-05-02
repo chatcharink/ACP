@@ -1,0 +1,96 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+th:
+  nav:
+    apply: "สมัครเลย"
+    rules: "กติกา"
+    gallery: "แกลเลอรี่"
+    terms: "เงื่อนไข"
+
+  hero:
+    title_1: "เปิดรับสมัครแล้ว"
+    title_2: "การแข่งขันดนตรี"
+    title_3: "สุดยิ่งใหญ่แห่งปี"
+    subtitle: "ONLINE 500 บาท / ONSITE 600 บาท"
+    learn_more: "กฎกติกาเพิ่มเติม"
+
+  competition:
+    title: "วันแข่งขัน"
+
+  rules:
+    online: "ออนไลน์"
+    onsite: "ออนไซต์"
+
+  buttons:
+    apply: "สมัครเลย"
+    close: "ปิด"
+
+  register:
+    title: "สมัครแข่งขัน"
+    full_name_th: "ชื่อ - นามสกุล (TH)"
+    full_name_en: "Full name (EN)"
+    select_category: "--- กรุณาเลือกรุ่นการแข่งขัน ---"
+    select_province: "--- กรุณาเลือกจังหวัด ---"
+    select_district: "--- กรุณาเลือกอำเภอ ---"
+    telephone: "เบอรโทรศัพท์"
+    email: "อีเมล"
+    song: "เพลงที่ใช้แข่งขัน"
+    duration: "เวลาที่ใช้แข่งขัน (MM:SS)"
+    online: "Online (500)"
+    onsite: "Onsite (600)"
+    application_fee: "ค่าสมัคร"
+    fee: "ภาษีมูลค่าเพิ่ม 7%"
+    total: "ทั้งหมด"
+    register_btn: "สมัคร"
+    cancel_btn: "ยกเลิก"
+  confirm_register:
+    title: "ยืนยันการสมัคร"
+    full_name_th: "ชื่อ - นามสกุล (TH)"
+    full_name_en: "Full name (EN)"
+    category: "รุ่นการแข่งขัน"
+    address: "จังหวัด/อำเภอ"
+    telephone: "เบอร์โทรศัพท์"
+    email: "อีเมล"
+    song_duration: "เพลง/เวลาที่ใช้ในการเข่งขัน"
+    type: "ประภทที่สมัคร"
+    application_fee: "ค่าสมัครทั้งหมด"
+    upload_pay: "สลิปการจ่ายเงิน"
+    confirm_btn: "ยืนยัน"
+    edit_btn: "แก้ไข"
+  register_success:
+    title: "ลงทะเบียนสำเร็จ"
+    subtitle: "ท่านได้ลงทะเบียนเข้าร่วมการแข่งขันสำเร็จแล้ว โปรดรอการตรวจสอบข้อมูลภายใน 24 ชั่วโมง หากท่านไม่ได้รับ Email ยืนยันการลงทะเบียนภายในเวลาที่กำหนด กรุณาติดต่อกลับมาที่เบอร์ 088-8888888 "
+    close_btn: "ปิด"
+  search:
+    title: "ค้นหารายชื่อ"
+    select_category: "--- กรุณาเลือกรุ่นการแข่งขัน ---"
+    select_type: "--- กรุณาเลือกประเภทการแข่งขัน ---"
+    search_btn: "ค้นหา"
+    close_btn: "ปิด"

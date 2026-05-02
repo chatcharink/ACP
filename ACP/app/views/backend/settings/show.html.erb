@@ -1,0 +1,246 @@
+<div data-controller="setting">
+    <div class="mb-6">
+        <h1 class="text-2xl font-semibold text-[#1A3C6D]">Settings</h1>
+        <p class="text-sm text-gray-500">จัดการข้อมูลสำหรับหน้าเว็บไซต์</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-4 mb-6">
+        <button data-action="click->setting#switch" data-tab="terms" class="tab-btn tab-active">Terms</button>
+        <button data-action="click->setting#switch" data-tab="rules" class="tab-btn">Rules</button>
+        <button data-action="click->setting#switch" data-tab="gallery" class="tab-btn">Gallery</button>
+        <button data-action="click->setting#switch" data-tab="categories" class="tab-btn">Categories</button>
+        <button data-action="click->setting#switch" data-tab="score_categories" class="tab-btn">Score Categories</button>
+        <button data-action="click->setting#switch" data-tab="banking" class="tab-btn">Banking</button>
+    </div>
+
+    <%= form_with url: backend_settings_path, method: :patch, multipart: true, html: { data: {action: "submit->setting#submit" }} do %>
+
+        <!-- TERMS -->
+        <div data-setting-target="panel" data-name="terms">
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="mb-4 font-semibold text-gray-700">
+                    Terms & Conditions
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-5">
+
+                <div>
+                    <label class="label">ภาษาไทย</label>
+                    <textarea name="settings[terms_th]" class="input-clean" rows="20"><%= @settings.terms_th %></textarea>
+                </div>
+
+                <div>
+                    <label class="label">English</label>
+                    <textarea name="settings[terms_en]" class="input-clean" rows="20"><%= @settings.terms_en %></textarea>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RULES -->
+        <div data-setting-target="panel" data-name="rules" class="hidden">
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="grid md:grid-cols-2 gap-5">
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <div class="font-semibold mb-2">Online</div>
+
+                        <div>
+                            <label class="label">ภาษาไทย</label>
+                            <textarea name="settings[rules_online_th]" rows="10" class="input-clean mb-3"><%= @settings.rules_online_th%></textarea>
+                        </div>
+                        <div>
+                            <label class="label">English</label>
+                            <textarea name="settings[rules_online_en]" rows="10" class="input-clean"><%= @settings.rules_online_en%></textarea>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <div class="font-semibold mb-2">Onsite</div>
+
+                        <div>
+                            <label class="label">ภาษาไทย</label>
+                            <textarea name="settings[rules_onsite_th]" rows="10" class="input-clean mb-3"><%= @settings.rules_onsite_th%></textarea>
+                        </div>
+                        <div>
+                            <label class="label">English</label>
+                            <textarea name="settings[rules_onsite_en]" rows="10" class="input-clean"><%= @settings.rules_onsite_en%></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- GALLERY -->
+        <div data-setting-target="panel" data-name="gallery" class="hidden">
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="mb-4 font-semibold text-gray-700">
+                    Gallery Images
+                </div>
+
+                <!-- Upload -->
+                <label class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-8 cursor-pointer hover:border-blue-500 transition">
+                    <input type="file" multiple class="hidden" data-action="change->setting#addFiles">
+                    <div>Upload Images</div>
+                </label>
+
+                <!-- Preview -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5" data-setting-target="preview">
+                    <% if @galleries.present? %>
+                        <% @galleries.each do |img| %>
+                            <div class="relative group">
+                            <% if img.image.attached? %>
+                                <%= image_tag img.image, class:"w-full h-32 object-cover rounded-lg" %>
+                            <% end %>
+                            <button type="button" data-action="click->setting#removeExisting" data-id="<%= img.id %>" class="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full hidden group-hover:block">
+                                ✕
+                            </button>
+
+                            </div>
+                        <% end %>
+                    <% end %>
+                    <input type="hidden" name="remove_gallery_ids[]" data-setting-target="removepic">
+                </div>
+            </div>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div data-setting-target="panel" data-name="categories" class="hidden">
+
+            <button type="button" data-action="click->setting#addGroup" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#1A3C6D] to-[#0A192F] text-white shadow hover:shadow-lg hover:scale-[1.02] transition text-sm font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                เพิ่มหัวข้อ
+            </button>
+
+            <div data-setting-target="groups" class="space-y-4 mt-4">
+
+                <% @groups.each do |g| %>
+                    <div class="border rounded-xl p-4">
+
+                        <!-- GROUP -->
+                        <input name="groups[][name_th]" value="<%= g.name_th %>" placeholder="หัวข้อ" class="input-clean mb-2">
+
+                        <!-- CATEGORIES -->
+                        <div data-category-target="items" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <% g.categories.each do |c| %>
+                                <input name="groups[][categories][][name_th]" value="<%= c.name_th %>" class="input-clean">
+                                <input name="groups[][categories][][name_en]" value="<%= c.name_en %>" class="input-clean">
+                                <input name="groups[][categories][][code]" value="<%= c.code %>" class="input-clean">
+                            <% end %>
+                        </div>
+
+                        <button type="button" data-action="click->setting#addItem" class="flex items-center gap-1 text-sm text-[#1A3C6D] hover:text-blue-700 transition group mt-2">
+
+                            <span class="w-5 h-5 flex items-center justify-center rounded-full border border-[#1A3C6D] group-hover:bg-[#1A3C6D] group-hover:text-white transition text-xs">
+                                +
+                            </span>
+                            เพิ่ม category
+                        </button>
+
+                    </div>
+                <% end %>
+
+            </div>
+        </div>
+
+        <!-- Score categories -->
+        <div data-setting-target="panel" data-name="score_categories" class="hidden">
+
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+
+                <div class="flex justify-between items-center mb-4">
+                    <div class="font-semibold text-gray-700">
+                        Score Categories
+                    </div>
+
+                    <button type="button" data-action="click->setting#addScore" class="px-3 py-1 bg-[#1A3C6D] text-white rounded text-sm">
+                        + เพิ่ม
+                    </button>
+                </div>
+
+                <!-- HEADER -->
+                <div class="grid grid-cols-[1fr_120px_40px] gap-3 text-sm text-gray-400 mb-2 px-1">
+                    <div>ชื่อ</div>
+                    <div class="text-center">คะแนนเต็ม</div>
+                    <div></div>
+                </div>
+
+                <!-- LIST -->
+                <div data-setting-target="scores" class="space-y-2">
+
+                    <% @score_categories.each do |s| %>
+                        <div class="grid grid-cols-[1fr_120px_40px] gap-3 items-center" data-score-row>
+
+                            <input type="hidden" name="scores[][id]" value="<%= s.id %>">
+
+                            <input type="text" name="scores[][name]" value="<%= s.name %>" class="input-clean" placeholder="ชื่อหัวข้อ">
+
+                            <input type="number" name="scores[][max_score]" value="<%= s.max_score %>" class="input-clean text-center" placeholder="100">
+
+                            <button type="button" data-action="click->setting#removeScore" class="text-red-500 hover:text-red-700">
+                                ✕
+                            </button>
+
+                        </div>
+                    <% end %>
+
+                    <input type="hidden" name="removed_score_ids[]" data-setting-target="removedScores">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Banking -->
+        <div data-setting-target="panel" data-name="banking" class="hidden">
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="mb-4 font-semibold text-gray-700">
+                    Banking information
+                </div>
+
+                <button type="button" data-action="click->setting#addGroup" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#1A3C6D] to-[#0A192F] text-white shadow hover:shadow-lg hover:scale-[1.02] transition text-sm font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    เพิ่มหัวข้อ
+                </button>
+
+                <div class="grid md:grid-cols-3 gap-5">
+
+                    <div>
+                        <label class="label">ธนาคาร</label>
+                        <input type="text" name="banking[bank_name]" class="input-clean" value="<%= @bank.present? ? @bank["bank_name"] : "" %>"/>
+                    </div>
+
+                    <div>
+                        <label class="label">เลขที่บัญชี</label>
+                        <input type="text" name="banking[acc_no]" class="input-clean" value="<%= @bank.present? ? @bank["account_no"] : "" %>"/>
+                    </div>
+
+                    <div>
+                        <label class="label">ชื่อบัญชี</label>
+                        <input type="text"  name="banking[acc_name]" class="input-clean" value="<%= @bank.present? ? @bank["account_name"] : "" %>"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- SAVE -->
+        <div class="mt-8 flex justify-end">
+
+            <button type="submit" class="px-8 py-3 rounded-xl text-white bg-gradient-to-r from-[#1A3C6D] to-[#0A192F] shadow-lg hover:scale-105 transition">
+                Save Changes
+            </button>
+
+        </div>
+
+    <% end %>
+
+</div>

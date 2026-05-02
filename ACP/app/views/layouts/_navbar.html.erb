@@ -1,0 +1,72 @@
+<header class="bg-[#0A192F] border-b shadow-sm px-4 py-3 flex items-center justify-between" data-controller="menu">
+
+    <!-- mobile menu -->
+    <div class="flex items-center gap-4">
+        <!-- Hamburger -->
+        <button class="text-gold md:hidden" data-action="click->menu#toggle">
+        ☰
+        </button>
+
+        <div data-menu-target="menu" class="hidden fixed top-0 left-0 w-full h-full bg-black/50 z-50">
+
+            <div class="bg-[#0A192F] w-64 h-full p-5 space-y-3">
+
+            <%= link_to "Dashboard", backend_dashboard_path(), class: "block text-white" %>
+            <%= link_to "Registration", backend_registrations_path(), class: "block text-white" %>
+            <%= link_to "Competition", backend_competitions_path(), class: "block text-white" %>
+
+            </div>
+
+        </div>
+
+        <!-- Logo -->
+        <img src="/acp_logo2.png" width="30"/>
+    </div>
+    
+
+    <!-- CENTER MENU -->
+    <nav class="hidden md:flex absolute left-1/2 -translate-x-1/2 gap-8 text-sm">
+
+        <% if session[:role] == "admin" %>
+            <%= link_to "Dashboard", backend_dashboard_path(),
+            class: "nav-item #{'active' if current_page?(backend_dashboard_path)}" %>
+
+            <%= link_to "Registration", backend_registrations_path(),
+            class: "nav-item #{'active' if current_page?(backend_registrations_path)}" %>
+        <% end %>
+
+        <%= link_to "Competition", backend_competitions_path(),
+        class: "nav-item #{'active' if current_page?(backend_competitions_path)}" %>
+
+    </nav>
+
+    <!-- RIGHT -->
+    <div class="relative">
+
+        <button data-action="click->menu#toggleDropdown" class="flex items-center gap-2 text-champagne hover:text-gold cursor-pointer">
+
+        <span class="hidden sm:block"><%= session[:firstname] %></span>
+
+        <div class="w-8 h-8 rounded-full bg-gold text-midnight flex items-center justify-center font-bold">
+            <%= session[:firstname].first %>
+        </div>
+
+        </button>
+
+        <!-- dropdown -->
+        <div data-menu-target="dropdown"
+            class="hidden absolute right-0 mt-2 w-48 bg-prussian border border-silverslate/30 rounded-lg shadow-xl">
+
+        <%= link_to "Setting", backend_settings_path(), class: "block px-4 py-2 text-crystal hover:bg-royalnavy cursor-pointer" %>
+
+        <%= link_to "User Management", backend_users_path(), class: "block px-4 py-2 text-crystal hover:bg-royalnavy cursor-pointer" %>
+
+        <hr class="border-silverslate/20">
+
+        <%= button_to "Logout", backend_logout_path(), method: :delete, class: "text-red-400 px-4 py-2 text-crystal hover:text-red-300 cursor-pointer" %>
+
+        </div>
+
+    </div>
+
+</header>

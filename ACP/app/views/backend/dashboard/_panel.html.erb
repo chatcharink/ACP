@@ -1,0 +1,141 @@
+<% data = local_assigns[:data] %>
+<% type = local_assigns[:type] %>
+
+<!-- SUMMARY -->
+<div class="grid grid-cols-3 gap-4 mb-6">
+
+    <div class="card shadow-xs">จำนวนผู้สมัคร(คน)<br>
+        <span class="flex justify-center"><%= data[:total] %></span>
+    </div>
+    <div class="card shadow-xs text-green-400">ชำระเงินแล้ว(คน)<br>
+        <span class="flex justify-center"><%= data[:confirmed] %></span>
+    </div>
+    <div class="card shadow-xs text-yellow-400">ยังไม่ชำระเงิน(คน)<br>
+        <span class="flex justify-center"><%= data[:pending] %></span>
+    </div>
+
+</div>
+
+<!-- CHARTS -->
+<div class="space-y-6">
+    <div class="text-midnight text-lg font-bold mb-3">
+        จำนวนผู้สมัครแต่ละรุ่น (คน)
+    </div>
+    <div class="shadow-xs chart-card h-[260px] md:h-[320px] lg:h-[360px] w-full">
+        <canvas id="countChart-<%= type %>"></canvas>
+    </div>
+
+    <div class="text-midnight text-lg font-bold mb-3">
+        เวลาที่ใช้ในแต่ละรุ่น (นาที)
+    </div>
+    <div class="shadow-xs chart-card h-[260px] md:h-[320px] lg:h-[360px] w-full">
+        <canvas id="timeChart-<%= type %>"></canvas>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+    document.addEventListener("turbo:load", () => {
+
+        const type = "<%= type %>"
+
+        const countCanvas = document.getElementById(`countChart-${type}`)
+        const timeCanvas  = document.getElementById(`timeChart-${type}`)
+
+        if (!countCanvas || !timeCanvas) return
+
+        // 🔥 destroy chart เก่าก่อน (กันไม่ขึ้น)
+        if (countCanvas.chart) countCanvas.chart.destroy()
+        if (timeCanvas.chart)  timeCanvas.chart.destroy()
+
+        // 🔥 register plugin
+        Chart.register(ChartDataLabels)
+
+        const labels = <%= raw data[:category_counts].keys.to_json %>
+
+        const getColors = (count) => {
+            return Array.from({ length: count }, (_, i) =>
+            i % 2 === 0 ? "#1A3150" : "#FF9F43"
+            )
+        }
+
+        const colors = getColors(labels.length)
+
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+            legend: { display: false },
+
+            datalabels: {
+                color: '#1A3150',
+                anchor: 'end',
+                align: 'top',
+                offset: -5,
+                font: {
+                weight: 'bold',
+                size: 12
+                },
+                formatter: (value) => value // 🔥 โชว์เลขบนแท่ง
+            }
+            },
+
+            scales: {
+            x: {
+                grid: { display: false },
+                ticks: { color: '#64748b' }
+            },
+            y: {
+                beginAtZero: true,
+                grid: { color: '#f1f5f9' },
+                ticks: { color: '#64748b' }
+            }
+            },
+
+            layout: {
+            padding: { top: 20 }
+            }
+        }
+
+        // -------------------
+        // Chart 1: จำนวน
+        // -------------------
+        const countChart = new Chart(countCanvas, {
+            type: 'bar',
+            data: {
+            labels: labels,
+            datasets: [{
+                data: <%= raw data[:category_counts].values.to_json %>,
+                backgroundColor: colors,
+                borderRadius: 6
+            }]
+            },
+            options: commonOptions
+        })
+
+        countCanvas.chart = countChart
+
+        // -------------------
+        // Chart 2: เวลา
+        // -------------------
+        const timeChart = new Chart(timeCanvas, {
+            type: 'bar',
+            data: {
+            labels: labels,
+            datasets: [{
+                data: <%= raw data[:category_duration].values.to_json %>,
+                backgroundColor: colors,
+                borderRadius: 6
+            }]
+            },
+            options: commonOptions
+        })
+
+        timeCanvas.chart = timeChart
+
+    })
+</script>

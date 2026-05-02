@@ -1,0 +1,44 @@
+<div class="p-6">
+
+    <h1 class="text-2xl font-semibold text-[#1A3C6D] mb-6">
+        การแข่งขัน
+    </h1>
+
+    <!-- Tabs -->
+    <div class="flex gap-3 mb-6">
+        <% ["500","600"].each do |type| %>
+            <% type_name = type == "500" ? "Online" : "Onsite"%>
+            <%= link_to type_name, backend_competitions_path(competition_type: type), class: "px-4 py-2 rounded-lg text-sm font-medium #{params[:competition_type] == type ? 'bg-[#1A3C6D] text-white' : 'bg-gray-100 text-gray-600'}" %>
+        <% end %>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white p-4 rounded-xl shadow mb-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+
+        <input type="text" placeholder="ค้นหาชื่อ..." class="input-clean">
+
+        <!-- category -->
+        <select class="input-clean">
+            <option value="">ทุกรุ่น</option>
+                <% @categories.each do |c| %>
+                    <option value="<%= c %>"><%= c %></option>
+                <% end %>
+        </select>
+
+        <select class="input-clean">
+            <option value="">รางวัล</option>
+            <option>Gold</option>
+            <option>Silver</option>
+        </select>
+
+        <select class="input-clean">
+            <option value="">สถานะ</option>
+            <option>ยังไม่แข่ง</option>
+            <option>แข่งแล้ว</option>
+        </select>
+
+    </div>
+
+    <%= render "table", registrations: @registrations %>
+
+</div>

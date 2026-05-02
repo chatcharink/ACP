@@ -1,0 +1,19 @@
+<div data-controller="dashboard">
+
+    <!-- TAB -->
+    <div class="flex gap-4 mb-6">
+        <button data-action="click->dashboard#switch" data-type="online" class="tab-btn tab-active">Online</button>
+        <button data-action="click->dashboard#switch" data-type="onsite" class="tab-btn">Onsite</button>
+    </div>
+
+    <!-- ONLINE -->
+    <div data-dashboard-target="online">
+        <%= render "panel", data: @online, type: "online" %>
+    </div>
+
+    <!-- ONSITE -->
+    <div data-dashboard-target="onsite" class="hidden">
+        <%= render "panel", data: @onsite, type: "onsite" %>
+    </div>
+
+</div>

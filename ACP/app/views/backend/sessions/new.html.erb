@@ -1,0 +1,39 @@
+<div class="min-h-screen flex items-center justify-center bg-crystal">
+
+    <div data-controller="login" class="glass-card p-10 w-96">
+        <img src="/acp_logo2.png" width="200" class="m-auto mb-5"/>
+
+        <%= form_for :login, url: backend_login_path(), method: :POST do |f| %>
+            <div class="mb-4">
+                <label class="text-midnight">Username</label>
+                <%= f.text_field :username, value: "", class: "w-full border border-midnight rounded p-2 mb-4 text-midnight" %>
+            </div>
+
+            <div class="mb-6 relative" data-controller="password">
+                <label class="text-midnight">Password</label>
+                <%= f.password_field :password, value: "", class: "w-full border border-midnight rounded p-2 mb-6 text-midnight", data: {"password-target": "input"} %>
+                <button type="button" data-action="click->password#toggle" class="absolute right-3 top-9 text-silverslate">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                </button>
+
+            </div>
+
+            <%= f.submit "Login", class: "gold-btn w-full cursor-pointer" %>
+        <% end %>
+
+    </div>
+</div>
+
+<% if flash[:error] %>
+
+<script>
+    document.addEventListener("DOMContentLoaded",()=>{
+        const card=document.querySelector(".glass-card")
+        card.classList.add("shake")
+    })
+</script>
+
+<% end %>

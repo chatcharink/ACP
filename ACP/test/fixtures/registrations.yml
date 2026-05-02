@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name_th: MyString
+  name_en: MyString
+  category: MyString
+  district: MyString
+  province: MyString
+  phone: MyString
+  email: MyString
+  song: MyString
+  duration: 1
+  competition_type: MyString
+  price: 1
+  vat: 1
+  total: 1
+
+two:
+  name_th: MyString
+  name_en: MyString
+  category: MyString
+  district: MyString
+  province: MyString
+  phone: MyString
+  email: MyString
+  song: MyString
+  duration: 1
+  competition_type: MyString
+  price: 1
+  vat: 1
+  total: 1

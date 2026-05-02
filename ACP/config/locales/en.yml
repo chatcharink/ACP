@@ -1,0 +1,96 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+en:
+  nav:
+    apply: "Apply Now"
+    rules: "Rules"
+    gallery: "Gallery"
+    terms: "Terms & Conditions"
+
+  hero:
+    title_1: "Now Open"
+    title_2: "Primary School Music Competition"
+    title_3: "Grand Event of the Year"
+    subtitle: "Online 500 THB / Onsite 600 THB"
+    learn_more: "Learn more"
+
+  competition:
+    title: "Competition day"
+
+  rules:
+    online: "Online"
+    onsite: "Onsite"
+
+  buttons:
+    apply: "Apply Now"
+    close: "Close"
+
+  register:
+    title: "Apply for competition"
+    full_name_th: "Full name (TH)"
+    full_name_en: "Full name (EN)"
+    select_category: "--- Please select category ---"
+    select_province: "--- Please select province ---"
+    select_district: "--- Please select district ---"
+    telephone: "Telephone"
+    email: "Email"
+    song: "Song name"
+    duration: "Time spent playing (MM:SS)"
+    online: "Online (500)"
+    onsite: "Onsite (600)"
+    application_fee: "Application fee"
+    fee: "VAT 7%"
+    total: "Total"
+    register_btn: "Apply"
+    cancel_btn: "Cancel"
+  confirm_register:
+    title: "Confirm your information"
+    full_name_th: "Full name (TH)"
+    full_name_en: "Full name (EN)"
+    category: "Category"
+    address: "Province/District"
+    telephone: "Telephone"
+    email: "Email"
+    song_duration: "Song name/Duration"
+    type: "Type"
+    application_fee: "Total application fee"
+    upload_pay: "Upload pay slip"
+    confirm_btn: "Confirm"
+    edit_btn: "Edit"
+  register_success:
+    title: "Application success"
+    subtitle: "You have successfully registered for the competition. Please wait for verification of your information within 24 hours. If you do not receive a registration confirmation email within the specified time, please contact us at 088-8888888."
+    close_btn: "Close"
+  search:
+    title: "Search you application"
+    select_category: "--- Please select category ---"
+    select_type: "--- Please select type ---"
+    search_btn: "Search"
+    close_btn: "Close"

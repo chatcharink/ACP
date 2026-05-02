@@ -1,0 +1,146 @@
+<div class="p-6 max-w-5xl mx-auto">
+
+    <h1 class="text-2xl font-semibold text-[#1A3C6D] mb-6">
+        ข้อมูลผู้สมัคร
+    </h1>
+
+    <div class="bg-white rounded-2xl shadow-xl p-6 mb-6" data-controller="register-management">
+
+        <%= form_with model: @registration, url: backend_registration_path(@registration), method: :patch, class: "grid grid-cols-1 md:grid-cols-2 gap-5", html: { data: { action: "submit->register-management#submit"} } do |f| %>
+
+            <div class="flex justify-center mb-8 col-span-2">
+
+                <div class="relative group">
+
+                    <% if @registration.image.attached? %>
+                        <%= image_tag @registration.image, class: "w-32 h-32 md:w-36 md:h-36 rounded-full object-cover shadow-lg ring-4 ring-white" %>
+                    <% else %>
+                        <img src="" class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover shadow-lg ring-4 ring-white hidden"/>
+                        <div id="new_profile" class="w-32 h-32 md:w-36 md:h-36 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-3xl">
+                            +
+                        </div>
+                    <% end %>
+
+                    <!-- overlay -->
+                    <label class="absolute inset-0 flex items-center justify-center bg-[#D4AF37]/80 text-white text-sm font-medium rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer">
+                        เปลี่ยนรูป
+                        <%= f.file_field :image, class: "hidden", data: { action: "change->register-management#showPreview" } %>
+                    </label>
+
+                </div>
+
+            </div>
+
+            <!-- TH Name -->
+            <div class="col-span-2 relative">
+                <%= f.text_field :name_th, class: "input-class", id: "name_th", placeholder: " ", data: { action: "input->register-management#validate" } %>
+                <label for="name_th" class="label-class">ชื่อ-นามสกุล (TH)</label>
+                <p class="text-xs mt-1 text-red-500 hidden" data-register-management-target="error" data-field="name_th"></p>
+            </div>
+
+            <!-- EN Name -->
+            <div class="col-span-2 relative">
+                <%= f.text_field :name_en, class: "input-class", id: "name_en", placeholder: " ", data: { action: "input->register-management#validate" } %>
+                <label for="name_en" class="label-class">ชื่อ-นามสกุล (EN)</label>
+                <p class="text-xs mt-1 text-red-500 hidden" data-register-management-target="error" data-field="name_en"></p>
+            </div>
+
+            <!-- Telephone -->
+            <div class="relative">
+                <%= f.text_field :phone, class: "input-class", id: "phone", placeholder: " ", data: { action: "input->register-management#formatPhone blur->register-management#validate", "register-management-target": "phone" } %>
+                <label for="phone" class="label-class">เบอร์โทร</label>
+                <p class="text-xs mt-1 text-red-500 hidden" data-register-management-target="error" data-field="phone"></p>
+            </div>
+
+            <!-- Email -->
+            <div class="relative">
+                <%= f.email_field :email, class: "input-class", id: "email", placeholder: " ", data: { action: "input->register-management#validate" } %>
+                <label for="email" class="label-class">Email</label>
+                <p class="text-xs mt-1 text-red-500 hidden" data-register-management-target="error" data-field="email"></p>
+            </div>
+
+            <!-- Category -->
+            <div class="relative">
+                <select name="registration[category]" class="input-class" data-action="change->filter#live" >
+                    <% @category_groups.each do |group| %>
+                        <optgroup label="<%= group.name_th %>" class="font-bold">
+
+                        <% group.categories.each do |c| %>
+                            <option value="<%= c.code %>" <%= "selected" if @registration.category == c.code %>>
+                                <%= c.name_en %>
+                            </option>
+                        <% end %>
+
+                        </optgroup>
+                    <% end %>
+
+                </select>
+                <label for="category" class="label-class">รุ่น</label>
+            </div>
+
+            <!-- Competition Type -->
+            <div class="relative">
+                <%= f.select :competition_type, [["Online","500"],["Onsite","600"]], {}, class: "input-class" %>
+                <label class="label-class">ประเภทการแข่งขัน</label>
+            </div>
+
+            <!-- Song -->
+            <div class="relative">
+                <%= f.text_field :song, class: "input-class", id: "song", placeholder: " ", data: { action: "input->register-management#validate" } %>
+                <label for="song" class="label-class">เพลงที่ใช้</label>
+                <p class="text-xs mt-1 text-red-500 hidden" data-register-management-target="error" data-field="song"></p>
+            </div>
+
+            <!-- Duration -->
+            <div class="relative">
+                <%= f.text_field :duration, value: format_duration(@registration.duration), class: "input-class", id: "duration", data: { action: "input->register-management#formatTime" } %>
+                <label for="duration" class="label-class">เวลาที่ใช้ (mm:ss)</label>
+                <p class="text-xs mt-1 text-red-500 hidden" data-register-management-target="error" data-field="duration"></p>
+            </div>
+
+
+            <div class="md:col-span-2 flex justify-end gap-3 mt-4">
+
+                <%= f.submit "Save", class: "px-6 py-2 rounded-lg text-white bg-gradient-to-r from-[#1A3C6D] to-[#0A192F] hover:shadow-lg transition cursor-pointer" %>
+                <%= link_to "Back", backend_registrations_path, class: "px-5 py-2 rounded-lg border text-gray-600 hover:bg-gray-100 cursor-pointer" %>
+
+            </div>
+        <% end %>
+
+    </div>
+
+    <h1 class="text-2xl font-semibold text-[#1A3C6D] mb-6">
+        Payment slip
+    </h1>
+
+    <div class="bg-white rounded-2xl shadow-xl p-6 mb-3">
+
+        <% if @registration.pay_slip.attached? %>
+            <div class="flex justify-center col-span-2">
+                <%= image_tag @registration.pay_slip, class: "shadow" %>
+            </div>
+        <% else %>
+            <div class="flex justify-center col-span-2">
+                <span>No payment slip</span>
+            </div>
+        <% end %>
+        
+        <!-- Buttons -->
+        <div class="md:col-span-2 flex justify-end gap-3 mt-4">
+
+            <%= button_to "Approve",
+                approve_backend_registration_path(@registration),
+                method: :patch,
+                data: { turbo: false },
+                class:"flex-1 bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 cursor-pointer" %>
+
+            <%= button_to "Reject",
+                reject_backend_registration_path(@registration),
+                method: :patch,
+                data: { turbo: false },
+                class:"flex-1 bg-red-600 text-white p-3 rounded-lg hover:bg-red-700 cursor-pointer" %>
+
+        </div>
+
+    </div>
+</div>

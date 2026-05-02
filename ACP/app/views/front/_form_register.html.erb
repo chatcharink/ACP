@@ -1,0 +1,255 @@
+<!-- FORM MODAL -->
+<%= form_for @register, url: registrations_path(), method: :POST, html: {data: {"register-target": "form", action: "submit->register#submit" }}, remote: true do |f| %>
+    <div data-register-target="formModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-start justify-center overflow-y-auto px-4 py-10">
+        <div class="bg-[#111] p-6 rounded-xl w-full max-w-2xl">
+
+            <h2 class="text-gold text-xl mb-4"><%= t("register.title") %></h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="flex justify-center">
+                    <img src="default_profile.png" data-register-target="preview" class="mt-2 rounded w-32" >
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <%# <label for="registration_image" class="block text-sm text-gray-400 mb-2">Profile</label> %>
+                        <%= f.file_field :image , accept: "image/*", class: "input-lux file:bg-[#B91C1C] file:text-white file:border-0 file:rounded-lg file:px-3 file:py-1", data: {"register-target": "image"} %>
+                    </div>
+                </div>
+
+                <div class="col-span-2 form-group">
+                    <div>
+                        <%= f.text_field :name_th, value: "", id: "name_th", class: "input-lux text-base", data: {"register-target": "nameTh", action: "input->register#validateRequired"} %>
+                        <label for="name_th" class="label-lux"><%= t("register.full_name_th") %></label>
+                        <p class="error-text" data-register-target="nameThError"></p>
+                    </div>
+                </div>
+
+                <div class="col-span-2 form-group">
+                    <div>
+                        <%= f.text_field :name_en, value: "", id: "name_en", class: "input-lux text-base", data: {"register-target": "nameEn", action: "input->register#validateRequired"} %>
+                        <label for="name_en" class="label-lux"><%= t("register.full_name_en") %></label>
+                        <p class="error-text" data-register-target="nameEnError"></p>
+                    </div>
+                </div>
+
+                <div class="col-span-2 form-group">
+                    <%# <label for="registration_category" class="block mb-2.5 text-sm font-medium text-heading">รุ่นที่สมัคร</label> %>
+                    <select name="registration[category]" class="select-lux w-full" data-register-target="category" data-action="change->register#validateSelect" >
+
+                    <option value="" disabled selected>
+                        <%= t("register.select_category") %>
+                    </option>
+                    <% @category_groups.each do |group| %>
+                        <optgroup label="<%= group.name_th %>" class="font-bold">
+
+                        <% group.categories.each do |c| %>
+                            <option value="<%= c.code %>">
+                                <% if I18n.locale.to_s == "th" %>
+                                    <%= c.name_th %>
+                                <% else %>
+                                    <%= c.name_en %>
+                                <% end %>
+                            </option>
+                        <% end %>
+
+                        </optgroup>
+                    <% end %>
+
+                    </select>
+                    <p class="error-text" data-register-target="categoryError"></p>
+                </div>
+
+                <div class="form-group">
+                    <%# <label for="registration_province" class="block mb-2.5 text-sm font-medium text-heading">จังหวัด</label> %>
+                    <%= f.select :province, options_for_select([]), {prompt: t("register.select_province")}, class: "select-lux w-full", data: {"register-target": "province", action: "change->register#loadDistricts"}  %>
+                    <p class="error-text" data-register-target="provinceError"></p>
+                </div>
+
+                <div class="form-group">
+                    <%# <label for="district" class="label-lux">อำเภอ</label> %>
+                    <%= f.select :district, options_for_select([]), {prompt: t("register.select_district")},  class: "select-lux w-full", disalbed: true, data: {"register-target": "district", action: "change->register#validateSelect"}  %>
+                    <p class="error-text" data-register-target="districtError"></p>
+                </div>
+
+                <div class="form-group">
+                    <%= f.text_field :phone, value: "", id: "phone", class: "input-lux", data: {"register-target": "phone", action: "input->register#formatPhone blur->register#validatePhone"} %>
+                    <label for="phone" class="label-lux"><%= t("register.telephone") %></label>
+                    <p class="error-text" data-register-target="phoneError"></p>
+                </div>
+
+                <div class="form-group">
+                    <%= f.text_field :email, value: "", id: "email", class: "input-lux", data: {"register-target": "email", action: "input->register#validateRequired"} %>
+                    <label for="email" class="label-lux"><%= t("register.email") %></label>
+                    <p class="error-text" data-register-target="emailError"></p>
+                </div>
+
+                <div class="form-group">
+                    <%= f.text_field :song, value: "", id: "song", class: "input-lux", data: {"register-target": "song", action: "input->register#validateRequired"} %>
+                    <label for="song" class="label-lux"><%= t("register.song") %></label>
+                    <p class="error-text" data-register-target="songError"></p>
+                </div>
+
+                <div class="form-group">
+                    <%= f.text_field :duration, value: "", id: "duration", class: "input-lux", data: {"register-target": "duration", action: "input->register#formatDuration blur->register#validateDuration"} %>
+                    <label for="duration" class="label-lux"><%= t("register.duration") %></label>
+                    <p class="error-text" data-register-target="durationError"></p>
+                </div>
+
+            </div>
+
+            <!-- TYPE -->
+            <div class="mt-4 flex gap-6">
+                <div class="flex items-center cursor-pointer">
+                    <%= f.radio_button :competition_type, '500', checked: true, id: "bordered-radio-1", class: "radio-lux", data: {action: "change->register#calculate"} %>
+                    <label for="bordered-radio-1" class="text-sm"><%= t("register.online") %></label>
+                </div>
+                <div class="flex items-center cursor-pointer">
+                    <%= f.radio_button :competition_type, '600', checked: false, id: "bordered-radio-2", class: "radio-lux", data: {action: "change->register#calculate"} %>
+                    <label for="bordered-radio-2" class="text-sm"><%= t("register.onsite") %></label>
+                </div>
+            </div>
+
+            <%= f.hidden_field :status, value: 0 %>
+
+            <!-- PRICE -->
+            <div class="mt-6 bg-black/40 p-4 rounded-lg border border-red-900/30">
+
+                <div class="flex justify-between text-base">
+                    <span><%= t("register.application_fee") %></span>
+                    <span data-register-target="price">0</span>
+                </div>
+
+                <div class="flex justify-between text-sm">
+                    <span><%= t("register.fee") %></span>
+                    <span data-register-target="vat">0</span>
+                </div>
+
+                <div class="flex justify-between text-lg text-gold mt-2">
+                    <span><%= t("register.total") %></span>
+                    <span data-register-target="total">0</span>
+                </div>
+
+            </div>
+
+            <!-- BUTTON -->
+            <div class="flex gap-4 mt-6">
+
+                <button type="button" data-action="click->register#confirm" class="btn-primary px-8 py-3 text-lg w-full cursor-pointer">
+                    <%= t("register.register_btn") %>
+                </button>
+
+                <button type="button" data-action="click->register#close" class="w-full border border-gray-600 rounded px-8 py-3 text-lg cursor-pointer">
+                    <%= t("register.cancel_btn") %>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CONFIRM -->
+    <div data-register-target="confirmModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center overflow-y-auto px-4 py-10 z-50">
+
+        <div class="bg-[#111] p-6 rounded-xl w-full max-w-2xl">
+
+            <h2 class="text-gold text-xl mb-4"><%= t("confirm_register.title") %></h2>
+
+            <div class="text-start text-base space-y-2">
+
+                <div class="flex justify-center mb-3">
+                    <img data-register-target="c_preview" class="mt-2 rounded w-32" >
+                </div>
+
+                <div class="mb-3">
+                    <%= t("confirm_register.full_name_th") %>: <span data-register-target="c_name"></span>
+                </div>
+                <div class="mb-3">
+                    <%= t("confirm_register.full_name_en") %>: <span data-register-target="c_nameEn"></span>
+                </div>
+                <div class="mb-3">
+                    <%= t("confirm_register.type") %>: <span data-register-target="c_type"></span>
+                </div>
+                <div class="mb-3">
+                    <%= t("confirm_register.category") %>: <span data-register-target="c_category"></span>
+                </div>
+                <div class="mb-3">
+                    <%= t("confirm_register.address") %>: <span data-register-target="c_provinceDistrict"></span>
+                </div>
+                <div class="mb-3">
+                    <%= t("confirm_register.telephone") %>: <span data-register-target="c_phone"></span>
+                </div>
+                <div class="mb-3">
+                    <%= t("confirm_register.email") %>: <span data-register-target="c_email"></span>
+                </div>
+                <div class="mb-3">
+                    <%= t("confirm_register.song_duration") %>: <span data-register-target="c_songDuration"></span>
+                </div>
+                <div class="mb-3">
+                    <%= t("confirm_register.application_fee") %>: <span data-register-target="c_total"></span>
+                </div>
+
+                <div class="mt-4 p-4 rounded-lg border border-red-900/30">
+                    <p>เลขที่บัญชี: <%= @bank.present? ? @bank["account_no"] : "" %></p>
+                    <p>ชื่อบัญชี: <%= @bank.present? ? @bank["account_name"] : "" %></p>
+                    <p><%= @bank.present? ? @bank["bank_name"] : "" %></p>
+                </div>
+
+                <div class="flex justify-center">
+                    <img data-register-target="previewSlip" class="mt-2 rounded w-32" >
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <label for="registration_pay_slip" class="block text-sm text-gray-400 mb-2"><%= t("confirm_register.upload_pay") %></label>
+                        <%= f.file_field :pay_slip , accept: "image/*", class: "input-lux file:bg-[#B91C1C] file:text-white file:border-0 file:rounded-lg file:px-3 file:py-1", data: {"register-target": "paySlip"} %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-6">
+
+                <button type="submit" class="btn-primary px-8 py-3 text-lg w-full cursor-pointer">
+                    <%= t("confirm_register.confirm_btn") %>
+                </button>
+
+                <button type="button" data-action="click->register#back" class="w-full border border-gray-600 rounded px-8 py-3 text-lg cursor-pointer">
+                    <%= t("confirm_register.edit_btn") %>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+<% end %>
+
+<div data-register-target="successModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+
+    <div class="bg-[#111] p-6 rounded-xl max-w-2xl">
+        <div class="flex justify-center mb-3 text-green-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+        </div>
+
+        <h2 class="text-gold text-xl text-center mb-3">
+            <%= t("register_success.title") %>
+        </h2>
+
+        <p class="text-gray-400 mb-4">
+            <%= t("register_success.subtitle") %>
+        </p>
+
+        <button data-action="click->register#closeAll" class="btn-primary px-8 py-3 mx-3 mt-4 w-full">
+            <%= t("register_success.close_btn") %>
+        </button>
+
+    </div>
+
+</div>
+
+<div class="mt-3 bg-gray-800 rounded h-2">
+    <div data-register-target="progressBar" class="h-2 bg-red-600 rounded" style="width:0%"></div>
+</div>

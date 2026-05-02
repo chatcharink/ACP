@@ -1,0 +1,79 @@
+<div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+
+    <%= form_for [:backend, @user], html: { class: "grid grid-cols-1 md:grid-cols-2 gap-5", data: { turbo: false, controller: "user", action: "submit->user#submit" } } do |f| %>
+
+        <div class="col-span-2 relative">
+            <%= f.text_field :username, class: "input-class", id: "username", placeholder: " ", data: { user_target: "input", field: "username", action: "input->user#validateField" } %>
+            <label for="username" class="label-class">Username</label>
+            <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="username"></p>
+        </div>
+
+        <% if @user.new_record? %>
+        <div class="col-span-2 relative">
+            <%= f.password_field :password, class:"input-class", id: "password", placeholder: " ", data: { user_target: "input", field: "password", action: "input->user#validateField" }  %>
+            <label for="password" class="label-class">Password</label>
+            <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="password"></p>
+        </div>
+        <% else %>
+            <div class="col-span-2 relative">
+                <button type="button" class="gold-btn cursor-pointer" data-action="click->user#toggle">
+                    Reset Password
+                </button>
+            </div>
+
+            <!-- Reset section -->
+            <div class="hidden col-span-2 bg-gray-50 border rounded-xl p-4" data-user-target="panel">
+                <div class="relative">
+                    <%= f.password_field :password, class: "input-class", id: "new_password", placeholder: " ", disabled: true, data: { field: "password", user_target: "input", user_target: "field", action: "input->user#validateField" } %>
+                    <label for="new_password" class="label-class">New Password</label>
+                    <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="password"></p>
+                </div>
+            </div>
+        <% end %>
+
+
+        <div class="relative">
+            <%= f.text_field :firstname, class:"input-class", id: "firstname", placeholder: " ", data: { user_target: "input", field: "firstname", action: "input->user#validateField" }  %>
+            <label for="firstname" class="label-class">Firstname</label>
+            <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="firstname"></p>
+        </div>
+
+        <div class="relative">
+            <%= f.text_field :lastname, class:"input-class", id: "lastname", placeholder: " ", data: { user_target: "input", field: "lastname", action: "input->user#validateField" }  %>
+            <label for="lastname" class="label-class">Lastname</label>
+            <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="lastname"></p>
+        </div>
+
+
+        <div class="relative">
+            <%= f.text_field :telephone, class:"input-class", id: "telephone", placeholder: " ", data: { user_target: "input", field: "telephone", action: "input->user#formatPhone input->user#validateField" }  %>
+            <label for="telephone" class="label-class">Telephone</label>
+            <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="telephone"></p>
+        </div>
+
+        <div class="relative">
+            <%= f.email_field :email, class:"input-class", id: "email", placeholder: " ", data: { user_target: "input", field: "email", action: "input->user#validateField" } %>
+            <label for="email" class="label-class">Email</label>
+            <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="email"></p>
+        </div>
+
+        <div class="relative">
+            <%= f.select :status, options_for_select(User.statuses.keys.map { |s| [s.capitalize, s] }, @user.status), {}, class:"input-class", id: "status", data: { user_target: "input", field: "status", action: "change->user#validateField" } %>
+            <label for="status" class="label-class">Status</label>
+            <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="status"></p>
+        </div>
+
+        <div class="relative">
+            <%= f.select :role, options_for_select(User.roles.keys.map { |r| [r.capitalize, r] }, @user.role), {}, class:"input-class", id: "role", data: { user_target: "input", field: "role", action: "change->user#validateField" } %>
+            <label for="role" class="label-class">Role</label>
+            <p class="text-xs mt-1 text-red-500 hidden" data-user-target="error" data-field="role"></p>
+        </div>
+
+        <div class="md:col-span-2 flex justify-end gap-3 mt-4">
+            <%= f.submit "Save", class:"px-6 py-2 rounded-lg text-white bg-gradient-to-r from-[#1A3C6D] to-[#0A192F] hover:shadow-lg transition cursor-pointer" %>
+            <%= link_to "Back", backend_users_path(), class: "px-5 py-2 rounded-lg border text-gray-600 hover:bg-gray-100 cursor-pointer" %>
+        </div>
+
+    <% end %>
+
+</div>

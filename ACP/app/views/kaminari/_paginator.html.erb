@@ -1,0 +1,51 @@
+<nav class="flex items-center justify-center gap-2 mt-6">
+
+    <!-- Prev -->
+    <% if current_page == 1 %>
+        <span class="px-3 py-1.5 rounded-lg border text-gray-300 cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
+            </svg>
+        </span>
+    <% else %>
+        <%= link_to url_for(page: current_page - 1),
+            class: "px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#1A3C6D] hover:border-[#1A3C6D] transition" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
+            </svg>
+        <% end %>
+    <% end %>
+
+    <!-- Pages -->
+    <% (1..total_pages).each do |p| %>
+
+        <% if p == current_page %>
+        <span class="px-3 py-1.5 rounded-lg text-white font-medium"
+            style="background: linear-gradient(135deg, #1A3C6D, #0A192F);
+                box-shadow: 0 4px 12px rgba(10,25,47,0.4);">
+            <%= p %>
+        </span>
+        <% else %>
+        <%= link_to p, url_for(page: p),
+            class: "px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#1A3C6D] hover:border-[#D4AF37] transition" %>
+        <% end %>
+
+    <% end %>
+
+    <!-- Next -->
+    <% if current_page == total_pages %>
+        <span class="px-3 py-1.5 rounded-lg border text-gray-300 cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+            </svg>
+        </span>
+    <% else %>
+        <%= link_to url_for(page: current_page + 1),
+            class: "px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#1A3C6D] hover:border-[#1A3C6D] transition" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+            </svg>
+        <% end %>
+    <% end %>
+
+</nav>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Acpimp" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/acp_logo2.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Thai:wght@300;400;500&family=Playfair+Display:wght@500;600&family=Noto+Serif+Thai:wght@400;500&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-midgrey text-midnight font-sans">
+
+    <div class="flex h-screen">
+
+      <%# render "layouts/sidebar" %>
+
+      <div class="flex flex-col flex-1">
+
+        <%= render "layouts/navbar" %>
+        <%= render "layouts/flash" %>
+
+        <main class="p-6 overflow-y-auto">
+          <%= yield %>
+        </main>
+
+      </div>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<div style="background:#0B0B0B; padding:40px 0; font-family:Arial, sans-serif;">
+  <table align="center" width="600" style="background:#111; border-radius:12px; overflow:hidden; color:#fff;">
+
+    <!-- HEADER -->
+    <tr>
+      <td style="padding:20px; text-align:center; border-bottom:1px solid #222;">
+        <h1 style="color:#D4AF37; margin:0; font-size:22px;">
+          MUSIC COMPETITION 2026
+        </h1>
+        <div style="font-size:12px; color:#888;">
+          Official Confirmation
+        </div>
+      </td>
+    </tr>
+
+    <!-- TITLE -->
+    <tr>
+      <td style="padding:30px; text-align:center;">
+        <div style="font-size:20px; color:#22c55e; margin-bottom:10px;">
+          Registration Approved
+        </div>
+
+        <div style="font-size:14px; color:#aaa;">
+          Your registration has been successfully confirmed
+        </div>
+      </td>
+    </tr>
+
+    <!-- USER INFO -->
+    <tr>
+      <td style="padding:20px 30px;">
+        <div style="background:#0f0f0f; padding:20px; border-radius:10px; border:1px solid #222;">
+
+          <table width="100%">
+            <tr>
+              <td style="color:#888;">Name</td>
+              <td align="right"><%= @registration.name_th %></td>
+            </tr>
+
+            <tr>
+              <td style="color:#888;">Competition Code</td>
+              <td align="right" style="color:#D4AF37; font-weight:bold;">
+                <%= @registration.code %>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="color:#888;">Category</td>
+              <td align="right"><%= @registration.category %></td>
+            </tr>
+
+            <tr>
+              <td style="color:#888;">Type</td>
+              <td align="right">
+                <%= @registration.competition_type == "500" ? "Online" : "Onsite" %>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+      </td>
+    </tr>
+
+    <!-- PAYMENT -->
+    <tr>
+      <td style="padding:20px 30px;">
+        <div style="background:#0E4D23; padding:20px; border-radius:10px; border:1px solid #22c55e;">
+
+          <div style="color:#22c55e; font-size:14px; margin-bottom:10px;">
+            Payment Received
+          </div>
+
+          <div style="font-size:22px; color:#fff; font-weight:bold;">
+            <%= @registration.competition_type %> THB
+          </div>
+
+        </div>
+      </td>
+    </tr>
+
+    <!-- BUTTON -->
+    <tr>
+      <td style="padding:30px; text-align:center;">
+
+        <div style="color:#fff; font-size:14px; margin-bottom:10px;">
+          Please find the receipt in attached
+        </div>
+
+      </td>
+    </tr>
+
+    <!-- FOOTER -->
+    <tr>
+      <td style="padding:20px; text-align:center; font-size:12px; color:#777; border-top:1px solid #222;">
+        © 2026 Music Competition<br>
+        This is an automated email
+      </td>
+    </tr>
+
+  </table>
+</div>

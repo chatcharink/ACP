@@ -1,0 +1,16 @@
+<div class="p-6" data-controller="delete">
+
+    <h1 class="text-2xl font-semibold mb-6 text-[#1A3C6D]">User Management</h1>
+
+    <div data-controller="filter">
+        <div class="bg-white rounded-xl shadow p-4 mb-4">
+            <%= render partial: "filter"%>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div id="user-table" data-filter-target="userResult">
+                <%= render "table" %>
+            </div>
+        </div>
+    </div>
+</div>

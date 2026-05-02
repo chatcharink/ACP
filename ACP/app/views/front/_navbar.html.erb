@@ -1,0 +1,22 @@
+<nav class="flex justify-between items-center px-6 py-4 bg-[#7f1d1d] shadow-lg" data-controller="nav">
+
+    <!-- LEFT: logo -->
+    <div class="text-xl font-semibold text-gold">
+        <img src="/acp_logo2.png" width="30"/>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="flex gap-6 text-sm items-center">
+
+        <%= link_to "EN", switch_lang_path(lang: :en), class: "text-sm" %>
+        <%= link_to "TH", switch_lang_path(lang: :th), class: "text-sm" %>
+
+        <div data-controller="search">
+            <button data-action="click->search#open" class="hover:text-gold transition cursor-pointer">
+                ตรวจสอบรายชื่อ
+            </button>
+            <%= render partial: "front/search" %>
+        </div>
+    </div>
+
+</nav>

@@ -1,0 +1,80 @@
+<div id="table-wrapper" class="hidden md:block">
+    <table class="w-full text-sm bg-white rounded-xl overflow-hidden">
+
+        <thead class="bg-gray-50 text-gray-600">
+            <tr>
+                <th class="p-4 text-left w-[6rem]">รูป</th>
+                <th class="p-4 <%= 'text-[#1A3C6D] font-semibold' if @sort == 'name_th' %> text-left cursor-pointer select-none" data-action="click->filter#sort" data-sort="name_th">
+                    <div class="flex items-center justify-between gap-2">
+                        ชื่อ-นามสกุล
+                        <span class="text-xs">
+                            <%= sort_icon("name_th", @sort, @direction) %>
+                        </span>
+                    </div>
+                </th>
+                
+                <%# <th class="p-4 text-center w-[8rem]">ประเภทที่สมัคร</th> %>
+                
+                <th class="p-4 text-center <%= 'text-[#1A3C6D] font-semibold' if @sort == 'code' %> cursor-pointer select-none" data-action="click->filter#sort" data-sort="code">
+                    <div class="grid grid-cols-[1rem_1fr_1rem] items-center gap-2">
+                        <span></span>
+
+                        <span class="text-center text-[#1A3C6D]">รหัสผู้เข้าแข่งขัน</span>
+
+                        <span class="text-xs justify-self-end">
+                            <%= sort_icon("code", @sort, @direction) %>
+                        </span>
+                    </div>
+                </th>
+
+                <th class="p-4 text-center">รุ่นที่สมัคร</th>
+
+                <th class="p-4 text-start">เพลงที่ใช้</th>
+                
+                <th class="p-4 <%= 'text-[#1A3C6D] font-semibold' if @sort == 'status' %> cursor-pointer select-none" data-action="click->filter#sort" data-sort="status">
+                    <div class="grid grid-cols-[1rem_1fr_1rem] items-center gap-2">
+                        <span></span>
+
+                        <span class="text-center text-[#1A3C6D]">สถานะ</span>
+
+                        <span class="text-xs justify-self-end">
+                            <%= sort_icon("status", @sort, @direction) %>
+                        </span>
+                    </div>
+                </th>
+                <th class="p-4">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% if @registrations.blank? %>
+                <tr class="border-t hover:bg-gray-50 transition text-center">
+                    <td class="p-4" colspan="7">ไม่พบข้อมูลผู้สมัคร</td>
+                </tr>
+            <% else %>
+                <%= render partial: "row", collection: @registrations, as: :registration %>
+            <% end %>
+        </tbody>
+    </table>
+
+    <div class="p-4">
+        <div class="flex items-center justify-between p-4 text-sm text-gray-500">
+
+            <div>
+                แสดง
+                <%= @registrations.offset_value + 1 %> -
+                <%= [@registrations.offset_value + @registrations.limit_value, @registrations.total_count].min %>
+                จาก <%= @registrations.total_count %> รายการ
+            </div>
+
+            <div>
+                <%= paginate @registrations, params: request.query_parameters %>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="md:hidden space-y-4">
+    <%= render "mobile_table", collection: @registrations, as: :registration %>
+</div>

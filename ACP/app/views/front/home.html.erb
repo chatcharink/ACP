@@ -1,0 +1,195 @@
+<div data-controller="register">
+    <section class="h-screen flex items-center justify-center text-center px-6 relative">
+
+        <!-- background -->
+        <div data-controller="parallax" class="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-30"></div>
+        <div class="absolute inset-0 bg-black/70"></div>
+
+        <div class="relative z-10 max-w-4xl reveal" data-controller="slide" data-slide-target="item">
+
+            <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6">
+
+            <span class="text-red-500"><%= t("hero.title_1") %></span><br>
+
+            <%= t("hero.title_2") %><br>
+
+            <span class="text-gold"><%= t("hero.title_3") %></span>
+
+            </h1>
+
+            <p class="text-gray-300 mb-8 text-lg">
+                <%= t("hero.subtitle") %>
+            </p>
+
+            <div class="flex justify-center gap-4">
+
+            <button data-action="click->register#open" class="bg-gold text-black px-10 py-4 rounded-full text-lg font-semibold shadow-xl cursor-pointer">
+                <%= t("buttons.apply") %>
+            </button>
+
+            <a href="#rules" class="border border-white/30 px-8 py-4 rounded-full hover:bg-white hover:text-black transition cursor-pointer">
+                <%= t("hero.learn_more") %>
+            </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="py-20 text-center">
+
+        <h2 class="text-center text-4xl font-bold text-gold mb-12">
+            <%= t("competition.title") %>
+        </h2>
+
+        <div data-controller="countdown" data-countdown-date="2026-08-24" class="flex justify-center gap-10 text-3xl font-bold">
+
+            <div><span data-countdown-target="days"></span><br><small>Days</small></div>
+            <div><span data-countdown-target="hours"></span><br><small>Hours</small></div>
+            <div><span data-countdown-target="minutes"></span><br><small>Min</small></div>
+            <div><span data-countdown-target="seconds"></span><br><small>Sec</small></div>
+
+        </div>
+
+    </section>
+
+    <section id="rules" class="px-6 py-24 scroll-mt-32">
+
+        <%# <div class="reveal" data-slide-target="item"> %>
+
+            <h2 class="text-center text-4xl font-bold text-gold mb-12">
+                <%= t("nav.rules") %>
+            </h2>
+
+            <div data-controller="tabs" class="max-w-5xl mx-auto">
+                <!-- TAB -->
+                <div class="flex justify-center gap-3 mb-10">
+                <button data-action="click->tabs#switch" data-tab="online" class="px-6 py-2 rounded-full bg-white/10 hover:bg-gold hover:text-black transition front-tab-btn active cursor-pointer">
+                    <%= t("rules.online") %>
+                </button>
+
+                <button data-action="click->tabs#switch" data-tab="onsite"
+                    class="px-6 py-2 rounded-full bg-white/10 hover:bg-gold hover:text-black transition front-tab-btn cursor-pointer">
+                    <%= t("rules.onsite") %>
+                </button>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="bg-gradient-to-br from-[#111] to-[#1a1a1a] p-10 rounded-3xl shadow-2xl text-gray-300 leading-relaxed text-sm space-y-4 reveal" data-controller="slide" data-slide-target="item">
+
+                    <div data-tabs-target="panel" data-tab="online">
+                        <%= simple_format(localized(@settings, :rules_online)) %>
+                    </div>
+
+                    <div data-tabs-target="panel" data-tab="onsite" class="hidden">
+                        <%= simple_format(localized(@settings, :rules_onsite)) %>
+                    </div>
+
+                </div>
+
+            </div>
+        <%# </div> %>
+
+    </section>
+
+    <section class="px-6 py-24">
+
+        <h2 class="text-center text-4xl text-gold mb-12">
+            Categories
+        </h2>
+
+        <div class="max-w-4xl mx-auto reveal" data-controller="slide" data-slide-target="item">
+            <% exists_group = [] %>
+            <% @category_groups.each do |group| %>
+            <% next if exists_group.include?(group.name_th) %>
+            <div class="mb-8">
+
+                <h3 class="text-xl text-white mb-3">
+                    <%= group.name_th %>
+                </h3>
+
+                <div class="flex flex-wrap gap-3">
+
+                <% group.categories.each do |c| %>
+                    <span class="px-4 py-2 bg-white/10 rounded-full text-sm">
+                        <% if I18n.locale.to_s == "th" %>
+                            <%= c.name_th %>
+                        <% else %>
+                            <%= c.name_en %>
+                        <% end %>
+                    </span>
+                <% end %>
+
+                </div>
+
+            </div>
+
+            <% exists_group << group.name_th %>
+            <% end %>
+
+        </div>
+
+    </section>
+
+    <section class="px-6 py-24 bg-[#D4AF37]">
+
+        <h2 class="text-center text-4xl font-bold text-[#7f1d1d] mb-12">
+            <%= t("nav.gallery") %>
+        </h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto" data-controller="slide">
+
+            <% @galleries.each do |img| %>
+            <div class="reveal group relative overflow-hidden rounded-2xl shadow-lg" data-slide-target="item">
+
+                <%= image_tag img.image,
+                class: "w-full h-56 object-cover transition duration-500 group-hover:scale-110" %>
+
+                <!-- overlay -->
+                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition"></div>
+
+            </div>
+            <% end %>
+
+        </div>
+
+    </section>
+
+    <section class="px-6 py-24">
+
+        <h2 class="text-center text-3xl text-gold mb-10">
+            <%= t("nav.terms") %>
+        </h2>
+
+        <div class="max-w-3xl mx-auto" data-controller="slide" data-slide-target="item">
+
+            <div class="bg-white/5 backdrop-blur-xl
+                        border border-white/10
+                        p-10 rounded-3xl shadow-xl">
+
+            <div class="text-gray-300 leading-relaxed space-y-3 text-sm">
+
+                <%= simple_format(localized(@settings, :terms)) %>
+
+            </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="text-center py-32 bg-gradient-to-b from-black to-[#7f1d1d]" data-controller="slide" data-slide-target="item">
+
+        <h2 class="text-4xl text-gold mb-6">
+            Ready to Join?
+        </h2>
+
+        <button data-action="click->register#open" class="bg-gold text-black px-12 py-5 rounded-full text-xl font-bold shadow-xl hover:scale-105 transition cursor-pointer">
+            <%= t("buttons.apply") %>
+        </button>
+
+    </section>
+    <%= render partial: "form_register" %>
+</div>

@@ -1,0 +1,30 @@
+<form data-filter-target="userForm" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+    <!-- search -->
+    <input type="text" name="q" value="<%= params[:q] %>" placeholder="Search name..." class="input-clean" data-filter-target="userInput" data-action="input->filter#userLive">
+
+    <!-- role -->
+    <select name="role" class="input-clean" data-filter-target="userInput" data-action="change->filter#userLive">
+        <option value="">All Role</option>
+        <% User.roles.keys.each do |r| %>
+            <option value="<%= r %>" <%= "selected" if params[:role] == r %>>
+            <%= r.capitalize %>
+            </option>
+        <% end %>
+    </select>
+
+    <!-- status -->
+    <select name="status" class="input-clean" data-filter-target="userInput" data-action="change->filter#userLive">
+        <option value="">All Status</option>
+        <% User.statuses.keys.each do |s| %>
+            <option value="<%= s %>" <%= "selected" if params[:status] == s %>>
+            <%= s.capitalize %>
+            </option>
+        <% end %>
+    </select>
+
+    <!-- add -->
+    <%= link_to "Add User",
+        new_backend_user_path,
+        class:"flex items-center justify-center rounded-lg bg-[#1A3C6D] text-white font-medium hover:shadow" %>
+
+</form>

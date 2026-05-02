@@ -1,0 +1,155 @@
+<div data-controller="rubric">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+        <!-- Profile -->
+        <div class="bg-white rounded-xl shadow p-5 flex items-center gap-4">
+
+            <%= image_tag @registration.image,
+                class: "w-20 h-20 rounded-xl object-cover" if @registration.image.attached? %>
+
+            <div>
+            <div class="text-lg font-semibold">
+                <%= @registration.name_th %>
+            </div>
+
+            <div class="text-sm text-gray-500">
+                <%= @registration.category %>
+            </div>
+            </div>
+
+        </div>
+
+        <!-- Award -->
+        <div class="bg-white rounded-xl shadow p-5 text-center">
+
+            <div class="text-sm text-gray-400 mb-1">
+                Award
+            </div>
+
+            <div class="text-5xl mb-2" data-rubric-target="icon"></div>
+
+            <div class="text-xl font-bold" data-rubric-target="label">
+                -
+            </div>
+
+            <div class="text-sm text-gray-400 mt-1">
+                Total: <span data-rubric-target="total">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <%= form_with url: admin_update_backend_competition_path(@registration), method: :patch, html: { multipart: true, data: { turbo: false } } do %>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <% @judges.each do |j| %>
+
+            <% judge_scores = @scores.select { |s| s.user_id == j.id } %>
+            <% has_score = judge_scores.any? %>
+
+            <div class="bg-white rounded-2xl shadow p-5 flex flex-col">
+
+                <!-- Header -->
+                <div class="flex justify-between mb-3">
+                    <div class="font-semibold"><%= j.firstname %> <%= j.lastname %></div>
+
+                    <% if has_score %>
+                        <span class="text-xs px-2 py-1 bg-green-100 text-green-600 rounded">
+                            กรรมการให้คะแนนแล้ว
+                        </span>
+                    <% else %>
+                        <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-600 rounded">
+                            กรรมการยังไม่ให้คะแนน
+                        </span>
+                    <% end %>
+                </div>
+
+                <!-- Rubric -->
+                <div class="space-y-2">
+
+                    <% @categories.each_with_index do |c, idx| %>
+
+                        <% score = judge_scores.find { |s| s.score_category_id == c.id } %>
+
+                        <div class="grid grid-cols-[1fr_auto] items-center gap-2">
+                            <span class="text-sm text-gray-600"><%= c.name %></span>
+
+                            <input type="number" name="scores[<%= j.id %>_<%= c.id %>][value]" value="<%= score&.value || '' %>" class="score-input w-16 h-10 border rounded text-center flex-shrink-0" data-action="input->rubric#recalculate" data-judge-id="<%= j.id %>" min="0" max="<%= c.max_score %>" step="1" >
+
+                            <input type="hidden"
+                            name="scores[<%= j.id %>_<%= c.id %>][criterion_id]"
+                            value="<%= c.id %>">
+
+                            <input type="hidden"
+                            name="scores[<%= j.id %>_<%= c.id %>][judge_id]"
+                            value="<%= j.id %>">
+
+                            <% if score.present? %>
+                            <input type="hidden"
+                                name="scores[<%= j.id %>_<%= c.id %>][id]"
+                                value="<%= score.id %>">
+                            <% end %>
+
+                        </div>
+
+                    <% end %>
+
+                </div>
+
+                <div class="mt-3 pt-3 border-t flex justify-between font-semibold">
+                    <span>Total</span>
+                    <span data-rubric-target="judgeTotal" data-judge-id="<%= j.id %>">
+                        <%= judge_scores.sum { |s| s.value.to_i } %>
+                    </span>
+                </div>
+
+                <!-- Comment -->
+                <div class="mt-3">
+
+                    <% main_score = judge_scores.first %>
+
+                    <div class="text-xs text-gray-400 mb-1">Comment Image</div>
+
+                    <div class="mb-2">
+                        <% if main_score&.comment_file&.attached? %>
+                            <%= image_tag main_score.comment_file, data: { rubric_target: "image", id: j.id }, class: "w-full mx-auto rounded-lg object-cover shadow" %>
+                        <% else %>
+                            <img data-rubric-target="image" data-id="<%= j.id %>" class="w-full mx-auto rounded-lg object-cover shadow">
+                            <span id="no-picture-<%= j.id %>" class="text-gray-400 text-sm">ไม่มีรูป</span>
+                        <% end %>
+                    </div>
+
+                    <!-- Upload -->
+                    <label class="block cursor-pointer border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-blue-500 transition">
+
+                        <div class="text-sm text-gray-600">
+                            คลิกเพื่ออัปโหลด Comment
+                        </div>
+
+                        <div class="text-xs text-gray-400" data-rubric-target="filename" data-id="<%= j.id %>">
+                            Support PNG, JPG, JPEG
+                        </div>
+
+                        <input type="file"
+                            name="file[<%= j.id %>]"
+                            accept="image/*"
+                            class="hidden"
+                            data-action="change->rubric#show"
+                            data-id="<%= j.id %>">
+                    </label>
+
+                </div>
+
+            </div>
+
+        <% end %>
+
+    </div>
+    <div class="mt-6 text-center">
+        <button class="px-6 py-3 bg-[#1A3C6D] text-white rounded-xl shadow cursor-pointer">
+            Save
+        </button>
+    </div>
+    <% end %>
+</div>

@@ -1,0 +1,116 @@
+<% r = registration %>
+
+<% row_class = case r.status
+        when 2 then "bg-red-50 border-l-4 border-red-400"
+        when 0 then "bg-yellow-50 border-l-4 border-yellow-400"
+        else "border-l-4 border-gray-50 hover:bg-gray-50"
+    end
+%>
+
+<tr class="border-t <%= row_class %> transition" data-filter-target="item">
+
+    <td class="p-4">
+        <% if r.image.attached? %>
+            <%= image_tag r.image, class:"w-12 h-12 rounded-lg object-cover" %>
+        <% end %>
+    </td>
+
+    <td class="p-4">
+        <div class="font-medium text-gray-800">
+            <%= r.name_th %>
+        </div>
+    </td>
+
+    <%# <td class="p-4 text-center">
+        <span class="px-2 py-1 text-xs rounded-full
+            < r.competition_type == '500' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600' >">
+            < r.competition_type == '500' ? "Online" : "Onsite" >
+        </span>
+    </td> %>
+
+    <td class="p-4 text-center">
+        <%= r.code %>
+    </td>
+
+    <td class="p-4 text-center">
+        <%= r.category %>
+    </td>
+
+    <td class="p-4 text-start">
+        <div class="flex flex-col gap-2">
+
+            <!-- song name -->
+            <div class="font-medium text-gray-800 leading-snug">
+            🎵 <%= r.song.presence || "-" %>
+            </div>
+
+            <!-- status badge -->
+            <div>
+                <% case r.song_status %>
+                <% when "approved" %>
+                    <span class="inline-block text-xs px-2 py-1 bg-green-100 text-green-600 rounded-full">
+                    ✔ Approved
+                    </span>
+                <% when "rejected" %>
+                    <span class="inline-block text-xs px-2 py-1 bg-red-100 text-red-600 rounded-full">
+                    ✕ Rejected
+                    </span>
+                <% end %>
+            </div>
+
+            <!-- action buttons -->
+            <div class="flex gap-2 mt-1">
+
+                <% unless r.song_status == "approved" %>
+                    <%= button_to approve_song_backend_registration_path(r),
+                        method: :patch,
+                        form: { data: { turbo: false } },
+                        # data: { turbo_confirm: "Approve เพลงนี้?" },
+                        class: "text-xs px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition cursor-pointer" do %>
+                    ✓
+                    <% end %>
+                <% end %>
+
+                <%# unless r.song_status == "rejected" %>
+                <% if r.song_status.blank? %>
+                    <%= button_to reject_song_backend_registration_path(r),
+                        method: :patch,
+                        form: { data: { turbo: false } },
+                        # data: { turbo_confirm: "Reject เพลงนี้?" },
+                        class: "text-xs px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition cursor-pointer" do %>
+                    ✕
+                    <% end %>
+                <% end %>
+
+            </div>
+
+        </div>
+    </td>
+
+    <td class="p-4 text-center">
+        <%= status_badge(r.status) %>
+    </td>
+
+    <td class="p-4 text-center space-x-2">
+
+        <%= link_to receipt_backend_registration_path(r), class:"text-[#1A3C6D] hover:text-blue-800 inline-flex" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m9 14.25 6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185ZM9.75 9h.008v.008H9.75V9Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+            </svg>
+        <% end %>
+
+        <%= link_to edit_backend_registration_path(r), class:"text-[#1A3C6D] hover:text-blue-800 inline-flex" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+            </svg>
+        <% end %>
+
+        <%= link_to backend_registration_path(r), method: :delete, data:{controller:"confirm", action:"click->confirm#confirm", menu: "register user"}, class:"text-[#1A3C6D] hover:text-red-800 inline-flex" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+            </svg>
+        <% end %>
+
+    </td>
+
+</tr>

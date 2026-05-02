@@ -1,0 +1,38 @@
+<!-- Modal -->
+<div data-search-target="modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+
+    <div class="bg-[#111] w-full max-w-2xl max-h-[90vh] flex flex-col rounded-xl">
+
+    <!-- HEADER -->
+    <div class="p-4 border-b border-gray-800 text-gold text-lg">
+        <%= t("search.title") %>
+    </div>
+
+    <!-- BODY -->
+    <div class="p-4 overflow-y-auto">
+
+        <!-- search form -->
+        <div class="grid grid-cols-1 gap-3">
+
+            <div class="mb-3 form-group">
+                <%= text_field_tag :keyword, "", id: "keyword", class: "input-lux text-base", data: {"search-target": "keyword"} %>
+                <label for="keyword" class="label-lux"><%= t("search.name_or_phone") %></label>
+            </div>
+
+            <div class="flex gap-4 mt-6">
+                <button data-action="click->search#submit" class="btn-primary px-8 py-3 w-full cursor-pointer">
+                    <%= t("search.search_btn") %>
+                </button>
+                <button type="button" data-action="click->search#close" class="w-full border border-gray-600 rounded px-8 py-3 text-lg cursor-pointer text-md">
+                    <%= t("search.close_btn") %>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- result -->
+        <div class="mt-6 space-y-3" data-search-target="results"></div>
+
+    </div>
+
+</div>
